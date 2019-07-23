@@ -3,62 +3,20 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import QRCode from 'qrcode.react';
 
 class Loginscreen extends Component {
   constructor(props){
     super(props);
     this.handleClick = this.handleClick.bind(this); //bind event 
-    var displayQRCode = [];
-    var localloginComponent=[];
-    const style = {
-      margin: 30,
-    };
-    displayQRCode.push(
-      <QRCode value = ""/>
-    )
-    localloginComponent.push(
-      <MuiThemeProvider key={"theme"}>
-        <div>
-         <TextField
-           hintText="Enter student ID"
-           floatingLabelText="Student ID"
-           onChange={(event,newValue) => this.setState({username:newValue})}
-           />
-         <br/>
-           <TextField
-             type="password"
-             hintText="Enter Password"
-             floatingLabelText="Password"
-             onChange={(event,newValue) => this.setState({password:newValue})}
-             />
-           <br/>
-           <RaisedButton 
-            label="Generate QR Code" 
-            primary={true}
-            style={style} 
-            onClick={() => this.handleClick()}/>
-       </div>
-       
-       </MuiThemeProvider>
-    )
     this.state={
       username:'',
       password:'',
-      loginComponent:localloginComponent,
-      displayQRCode:displayQRCode,
-      isDisplay:false
+      isDisplay: false
     }
     
   }
   handleClick(){
-    //this.setState({isDisplay:!isDisplay})
-    console.log(this.state.username +', ' +this.state.password);    
-    //ReactDOM.render();
-    //  this.qrcodeComponent.push(
-    //     <QRCode value = "5910110573" />
-    //  );
-
+    console.log(this.state.username +', ' +this.state.password);
   }
 
   
@@ -81,18 +39,44 @@ class Loginscreen extends Component {
   //    console.log(error);
   //  });
   
-
   render() {
+    const style = {
+      margin:30,
+    }
     return (
       <div>
-        <MuiThemeProvider>
+        {/*app bar section */}
+        <MuiThemeProvider key = {"theme"}>
           <AppBar title="Login Page Exeriment"/>
-        </MuiThemeProvider>        
-        {this.state.loginComponent}
-        <p>qrcode section</p>
-        {this.state.displayQRCode}
-      
-      </div>
+        </MuiThemeProvider>
+        {/*form section */}
+          <MuiThemeProvider key={"theme"}> 
+        <div>
+         <TextField
+           hintText="Enter student ID"
+           floatingLabelText="Student ID"
+           onChange={(event,newValue) => this.setState({username:newValue})}
+           />
+         <br/>
+           <TextField
+             type="password"
+             hintText="Enter Password"
+             floatingLabelText="Password"
+             onChange={(event,newValue) => this.setState({password:newValue})}
+             />
+           <br/>
+           
+           <RaisedButton 
+            label="Generate QR Code" 
+            primary={true}
+            style = {style}
+            onClick={() => this.handleClick()}/>
+           
+       </div>
+       
+        </MuiThemeProvider>  {/*end of form section */}
+        
+       </div>
     );
   }
 }
