@@ -3,6 +3,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import QRCode from 'qrcode.react'
 
 class Loginscreen extends Component {
   constructor(props){
@@ -11,7 +12,7 @@ class Loginscreen extends Component {
     this.state={
       username:'',
       password:'',
-      isDisplay: false
+      displayQRCode:displayQRCode
     }
     
   }
@@ -50,7 +51,7 @@ class Loginscreen extends Component {
           <AppBar title="Login Page Exeriment"/>
         </MuiThemeProvider>
         {/*form section */}
-          <MuiThemeProvider key={"theme"}> 
+          <MuiThemeProvider > 
         <div>
          <TextField
            hintText="Enter student ID"
