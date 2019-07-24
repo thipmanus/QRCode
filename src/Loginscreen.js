@@ -5,41 +5,24 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import QRCode from 'qrcode.react'
 
+
 class Loginscreen extends Component {
   constructor(props){
     super(props);
-    this.handleClick = this.handleClick.bind(this); //bind event 
+    this.handleClick = this.handleClick.bind(this); //bind event
     this.state={
       username:'',
       password:'',
-      displayQRCode:displayQRCode
+      QRID:'',
+      size:'',
     }
     
   }
   handleClick(){
     console.log(this.state.username +', ' +this.state.password);
+    this.setState({QRID:this.state.username , size:290,})
   }
 
-  
-  //   axios.post(apiBaseUrl+'login', payload)
-  //  .then(function (response) {
-  //    console.log(response);
-  //    if(response.data.code === 200){
-  //      console.log("Login successfull");
-  //    }
-  //    else if(response.data.code === 204){
-  //      console.log("Username password do not match");
-  //      alert(response.data.success)
-  //    }
-  //    else{
-  //      console.log("Username does not exists");
-  //      alert("Username does not exist");
-  //    }
-  //  })
-  //  .catch(function (error) {
-  //    console.log(error);
-  //  });
-  
   render() {
     const style = {
       margin:30,
@@ -56,7 +39,7 @@ class Loginscreen extends Component {
          <TextField
            hintText="Enter student ID"
            floatingLabelText="Student ID"
-           onChange={(event,newValue) => this.setState({username:newValue})}
+           onChange={(event,newValue,text) => this.setState({username:newValue , inputValue: text})}
            />
          <br/>
            <TextField
@@ -72,11 +55,17 @@ class Loginscreen extends Component {
             primary={true}
             style = {style}
             onClick={() => this.handleClick()}/>
-           
+ 
        </div>
-       
+       <div>
+          <QRCode
+            value={this.state.QRID}
+            size={this.state.size}
+            level={"H"}
+            includeMargin={true}
+          />
+      </div>    
         </MuiThemeProvider>  {/*end of form section */}
-        
        </div>
     );
   }
