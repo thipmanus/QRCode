@@ -23,18 +23,18 @@ pool.connect(function(error){
 //     response.status(200).json(results.rows)
 //   })
 // }
+/*
+const getUserById = (request, response) => {
+   const id = parseInt(request.params.id)
 
-// const getUserById = (request, response) => {
-//   const id = parseInt(request.params.id)
-
-//   pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
-//     if (error) {
-//       throw error
-//     }
-//     response.status(200).json(results.rows)
-//   })
-// }
-
+   pool.query('SELECT * FROM users WHERE "MEMBERCODE" = $1', [id], (error, results) => {
+     if (error) {
+       throw error
+     }
+     response.status(200).json(results.rows)
+   })
+ }
+*/
 // const createUser = (request, response) => {
 //   const { name, email } = request.body
 
