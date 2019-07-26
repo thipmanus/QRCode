@@ -63,6 +63,59 @@ function getDate(select){
   }
 }
 
+function encrypt(word){
+  var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-.:;=?@[]^_`{|}~";
+  var permuted = "QU2HAd0w3VCspWrokXmyNzYbIJKvLMhij85DOn1Sce49gP7BEuTfZ6FxqRlatG!#$%&()*+,-.:;=?@[]^_`{|}~";
+ //input
+  var i=0;
+  var result = "";　
+  //loop receive 
+  while (i < word.length) {
+      //ถ้า word ไม่อยู่ใน alphabet จะออกมาเป็นตัวเดิม
+  　　var ind = alphabet.indexOf(word.charAt(i));
+      result = result + permuted.charAt(ind); //expected is 28KTKScS_ZF
+      i++;
+  }
+  return result;
+}
+
+function checklogin(){
+  var id = 'RG6Z66ZRax'
+  var password = '28KTKScS_ZF'
+  var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('POST', 'http://opac.psu.ac.th/PatronService.asmx?op=GetPatron', true );
+    var sr = 
+            '<?xml version="1.0" encoding="utf-8"?>' +
+            '<soap:Envelope ' +
+                'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+                'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' + 
+                'xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> ' +
+                '<soap:Body> ' +
+                    '<GetPatron xmlns="http://opac.psu.ac.th/">' +
+                        '<username>'+id+'</username> ' +
+                        '<password>'+password+'</password> ' +
+                    '</GetPatron> ' +
+                '</soap:Body> ' +
+            '</soap:Envelope>' ;
+    xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+    xmlhttp.send(sr);
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+          var resultxml = xmlhttp.responseText;
+          var i = 0
+          while(i < resultxml.length){
+            if(resultxml.substring(i,i+17) === "<GetPatronResult>"){
+                var resultFromXml = resultxml.substr(i+17,1)
+                console.log('จาก xml ' + resultFromXml)
+            }
+            i++
+          }
+          //return resultFromXml;
+        }
+    };
+}
+
 class Loginscreen extends Component {
   constructor(props){
     super(props);
@@ -77,22 +130,25 @@ class Loginscreen extends Component {
       dateTime:'',
       genKey:'',
       setResult:'start',
+      userEncrypt:'',
+      passEncrypt:'',
     }
   }
   handleClick(){
-    console.log(this.state.username +', ' +this.state.password);
+    this.setState({userEncrypt:encrypt(this.state.username)})
+    this.setState({passEncrypt:encrypt(this.state.password)})
     //this.setState({UserNumber:this.state.UserNumber + 1})
     this.setState({genKey:this.state.key})
     this.setState({key:getRndInteger()})
     this.setState({dateTime:getDate('stamp')})
     this.setState({QRID:'TM' + this.state.username + /* pad(this.state.UserNumber + 1, 3)+ */ this.state.key + getDate('gen'), size:250,})
-    this.setState({setResult:'qrcode'})
+    this.setState({setResult:checklogin()})
   }
   render() {
     const style = {
       margin:30,
     }
-    if(this.state.setResult === 'qrcode' ){
+    if(this.state.setResult === '1' ){
       return(
         <div>
           <MuiThemeProvider key = {"theme"}>
@@ -101,7 +157,10 @@ class Loginscreen extends Component {
         <MuiThemeProvider > 
         <div>
         <br/>
-         {'ID : ' + this.state.username}
+         {'ID : ' + this.state.userEncrypt}
+        <br/>
+        <br/>
+         {'Pass : ' + this.state.passEncrypt}
         <br/>
         <br/>
          {'Key : ' + this.state.genKey}
@@ -150,7 +209,9 @@ class Loginscreen extends Component {
             primary={true}
             style = {style}
             onClick={() => this.handleClick()}/>
-           
+
+            <br/>
+           {'state : ' + this.state.setResult}
        </div>   
         </MuiThemeProvider>
        </div>

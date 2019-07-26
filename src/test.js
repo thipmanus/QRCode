@@ -20,10 +20,15 @@
     xmlhttp.send(sr);
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-           console.log(xmlhttp.responseText)
-           console.log(xmlhttp.responseXML)
-           
-           console.log('from condition, it fucking responded')
+           var resultxml = xmlhttp.responseText;
+           var i = 0
+          while(i < resultxml.length){
+            if(resultxml.substring(i,i+17) == "<GetPatronResult>"){
+                var resultFromXml = resultxml.substr(i+17,1)
+                console.log(resultFromXml)
+            }
+            i++
+          }
         }
     };
     
