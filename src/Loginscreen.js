@@ -77,7 +77,7 @@ function getDate(select){
 }
 function encrypt(word){
   var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-.:;=?@[]^_`{|}~";
-  var permuted = "QU2HAd0w3VCspWrokXmyNzYbIJKvLMhij85DOn1Sce49gP7BEuTfZ6FxqRlatG!#$%&()*+,-.:;=?@[]^_`{|}~";
+  
  //input
   var i=0;
   var result = "";　
