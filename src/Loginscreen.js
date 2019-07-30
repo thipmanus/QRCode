@@ -77,12 +77,13 @@ function getDate(select){
 }
 function encrypt(word){
   var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-.:;=?@[]^_`{|}~";
-  
+  var permuted = "QU2HAd0w3VCspWrokXmyNzYbIJKvLMhij85DOn1Sce49gP7BEuTfZ6FxqRlatG!#$%&()*+,-.:;=?@[]^_`{|}~";
  //input
   var i=0;
   var result = "";　
   //loop receive
   while (i < word.length) {
+      //ถ้า word ไม่อยู่ใน alphabet จะออกมาเป็นตัวเดิม
   　　var ind = alphabet.indexOf(word.charAt(i));
       result = result + permuted.charAt(ind); //expected is 28KTKScS_ZF
       i++;
@@ -116,7 +117,7 @@ class Loginscreen extends Component {
     var resultFromXml
     var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
       var xmlhttp = new XMLHttpRequest();
-      xmlhttp.open('POST', 'http://opac.psu.ac.th/PatronService.asmx?op=GetPatron', true );
+      xmlhttp.open('POST', 'https://opac.psu.ac.th/PatronService.asmx?op=GetPatron', true );
       var sr = 
               '<?xml version="1.0" encoding="utf-8"?>' +
               '<soap:Envelope ' +
