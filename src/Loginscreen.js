@@ -77,7 +77,6 @@ function getDate(select){
 }
 function encrypt(word){
   var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-.:;=?@[]^_`{|}~";
-  
  //input
   var i=0;
   var result = "";　
@@ -115,38 +114,39 @@ class Loginscreen extends Component {
   }
   sendRequest() {
     var resultFromXml
-    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-      var xmlhttp = new XMLHttpRequest();
-      xmlhttp.open('POST', 'https://opac.psu.ac.th/PatronService.asmx?op=GetPatron', true );
-      var sr = 
-              '<?xml version="1.0" encoding="utf-8"?>' +
-              '<soap:Envelope ' +
-                  'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-                  'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' + 
-                  'xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> ' +
-                  '<soap:Body> ' +
-                      '<GetPatron xmlns="http://opac.psu.ac.th/">' +
-                          '<username>'+testId+'</username> ' +
-                          '<password>'+testPassword+'</password> ' +
-                      '</GetPatron> ' +
-                  '</soap:Body> ' +
-              '</soap:Envelope>' ;
-      xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-      xmlhttp.send(sr);
-      xmlhttp.onreadystatechange = function (e) {
-          if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-            var resultxml = xmlhttp.responseText;
-            var i = 0
-            while(i < resultxml.length){
-              if(resultxml.substring(i,i+17) === "<GetPatronResult>"){
-                  resultFromXml = resultxml.substr(i+17,1)
-                  this.setState({setResult:resultFromXml});
-                  console.log('จาก xml ' + resultFromXml)
-              }
-              i++
-            }
-          }
-      }.bind(this);
+    var axios = require('axios')
+    let xmls = '<?xml version="1.0" encoding="utf-8"?>' +
+                '<soap:Envelope ' +
+                    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+                    'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' + 
+                    'xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> ' +
+                    '<soap:Body> ' +
+                        '<GetPatron xmlns="http://opac.psu.ac.th/">' +
+                            '<username>'+testId+'</username> ' +
+                            '<password>'+testPassword+'</password> ' +
+                        '</GetPatron> ' +
+                    '</soap:Body> ' +
+                '</soap:Envelope>' ;
+
+    axios.post('http://opac.psu.ac.th/PatronService.asmx?op=GetPatron',
+    xmls,
+    {headers:
+      {'Content-Type': 'text/xml',
+        'Access-Control-Allow-Origin':'*'
+      }
+    }).then(res=>{
+      var resultxml = res.data;
+      var i = 0
+      while(i < resultxml.length){
+        if(resultxml.substring(i,i+17) === "<GetPatronResult>"){
+            resultFromXml = resultxml.substr(i+17,1)
+            this.setState({setResult:resultFromXml});
+            console.log('จาก xml ' + resultFromXml)
+        }
+        i++
+      }
+      console.log(res);
+    }).catch(err=>{console.log(err)});
     }
   handleClick(){
     testId = encrypt(this.state.username)
