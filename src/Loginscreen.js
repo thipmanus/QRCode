@@ -77,6 +77,7 @@ function getDate(select){
 }
 function encrypt(word){
   var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-.:;=?@[]^_`{|}~";
+  
  //input
   var i=0;
   var result = "";　
@@ -127,12 +128,13 @@ class Loginscreen extends Component {
                         '</GetPatron> ' +
                     '</soap:Body> ' +
                 '</soap:Envelope>' ;
-
-    axios.post('http://opac.psu.ac.th/PatronService.asmx?op=GetPatron',
+  axios.create({
+    baseURL: "http://localhost:3000"
+  }).post('https://opac.psu.ac.th/PatronService.asmx?op=GetPatron',
     xmls,
     {headers:
-      {'Content-Type': 'text/xml',
-        'Access-Control-Allow-Origin':'*'
+      { 
+        'Content-Type': 'text/xml',
       }
     }).then(res=>{
       var resultxml = res.data;
@@ -145,7 +147,6 @@ class Loginscreen extends Component {
         }
         i++
       }
-      console.log(res);
     }).catch(err=>{console.log(err)});
     }
   handleClick(){
