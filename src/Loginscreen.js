@@ -77,13 +77,12 @@ function getDate(select){
 }
 function encrypt(word){
   var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-.:;=?@[]^_`{|}~";
-  
+  var permuted = ''
  //input
   var i=0;
   var result = "";　
   //loop receive
   while (i < word.length) {
-      //ถ้า word ไม่อยู่ใน alphabet จะออกมาเป็นตัวเดิม
   　　var ind = alphabet.indexOf(word.charAt(i));
       result = result + permuted.charAt(ind); //expected is 28KTKScS_ZF
       i++;
