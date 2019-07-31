@@ -78,19 +78,19 @@ function getDate(select){
 function encrypt(word){
   var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-.:;=?@[]^_`{|}~";
   var permuted = ''
- //input
+
   var i=0;
   var result = "";　
-  //loop receive
+  
   while (i < word.length) {
   　　var ind = alphabet.indexOf(word.charAt(i));
-      result = result + permuted.charAt(ind); //expected is 28KTKScS_ZF
+      result = result + permuted.charAt(ind); 
       i++;
   }
   return result;
 }
-var testId;
-var testPassword;
+// var testId;
+// var testPassword;
 class Loginscreen extends Component {
   constructor(props){
     super(props);
@@ -112,46 +112,47 @@ class Loginscreen extends Component {
       passEncrypt:'',
     }
   }
-  sendRequest() {
-    var resultFromXml
-    var axios = require('axios')
-    let xmls = '<?xml version="1.0" encoding="utf-8"?>' +
-                '<soap:Envelope ' +
-                    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-                    'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' + 
-                    'xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> ' +
-                    '<soap:Body> ' +
-                        '<GetPatron xmlns="http://opac.psu.ac.th/">' +
-                            '<username>'+testId+'</username> ' +
-                            '<password>'+testPassword+'</password> ' +
-                        '</GetPatron> ' +
-                    '</soap:Body> ' +
-                '</soap:Envelope>' ;
-  axios.create({
-    baseURL: "http://localhost:3000"
-  }).post('https://opac.psu.ac.th/PatronService.asmx?op=GetPatron',
-    xmls,
-    {headers:
-      { 
-        'Content-Type': 'text/xml',
-      }
-    }).then(res=>{
-      var resultxml = res.data;
-      var i = 0
-      while(i < resultxml.length){
-        if(resultxml.substring(i,i+17) === "<GetPatronResult>"){
-            resultFromXml = resultxml.substr(i+17,1)
-            this.setState({setResult:resultFromXml});
-            console.log('จาก xml ' + resultFromXml)
-        }
-        i++
-      }
-    }).catch(err=>{console.log(err)});
-    }
+  // sendRequest() {
+  //   var resultFromXml
+  //   var axios = require('axios')
+  //   let xmls = '<?xml version="1.0" encoding="utf-8"?>' +
+  //               '<soap:Envelope ' +
+  //                   'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+  //                   'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' + 
+  //                   'xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"> ' +
+  //                   '<soap:Body> ' +
+  //                       '<GetPatron xmlns="http://opac.psu.ac.th/">' +
+  //                           '<username>'+testId+'</username> ' +
+  //                           '<password>'+testPassword+'</password> ' +
+  //                       '</GetPatron> ' +
+  //                   '</soap:Body> ' +
+  //               '</soap:Envelope>' ;
+  // axios.create({
+  //   baseURL: "http://localhost:3000"
+  // }).post('https://opac.psu.ac.th/PatronService.asmx?op=GetPatron',
+  //   xmls,
+  //   {headers:
+  //     { 
+  //       'Content-Type': 'text/xml',
+  //     }
+  //   }).then(res=>{
+  //     var resultxml = res.data;
+  //     var i = 0
+  //     while(i < resultxml.length){
+  //       if(resultxml.substring(i,i+17) === "<GetPatronResult>"){
+  //           resultFromXml = resultxml.substr(i+17,1)
+  //           this.setState({setResult:resultFromXml});
+  //           console.log('จาก xml ' + resultFromXml)
+  //       }
+  //       i++
+  //     }
+  //   }).catch(err=>{console.log(err)});
+  //   }
   handleClick(){
-    testId = encrypt(this.state.username)
-    testPassword = encrypt(this.state.password)
-    this.sendRequest()
+    // testId = encrypt(this.state.username)
+    // testPassword = encrypt(this.state.password)
+    // this.sendRequest()
+    this.setState({setResult:'1'})
     this.setState({userEncrypt:encrypt(this.state.username)})
     this.setState({passEncrypt:encrypt(this.state.password)})
     this.setState({firstgenKey:this.state.firstkey})
