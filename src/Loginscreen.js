@@ -30,29 +30,6 @@ const logo = require('./logo.png');
 {'dateTime : ' + this.state.dateTime}
 <br/>
 {'expireTime : ' + this.state.expireTime}
-
-function pad(number, length) {
-   
-    var str = '' + number;
-    while (str.length < length) {
-        str = '0' + str;
-    }
-   
-    return str;
-
-}
-function firstgetRndInteger() {
-  var keyNumber = '';
-  keyNumber = Math.floor(Math.random() * (500) ) + 1;
-  keyNumber = pad(keyNumber, 3)
-  return keyNumber;
-}
-function lastgetRndInteger() {
-  var keyNumber = '';
-  keyNumber = Math.floor(Math.random() * (499) ) + 501;
-  keyNumber = pad(keyNumber, 3)
-  return keyNumber;
-}
 */
 function getDate(select){
   var dateNext = '';
@@ -103,7 +80,7 @@ function getDate(select){
 }
 function encrypt(word){
   var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,-.:;=?@[]^_`{|}~";
-  
+  var permuted = "";
  //input
   var i=0;
   var result = "";　
@@ -231,13 +208,14 @@ class Loginscreen extends Component {
     }
     //console.log('ใน render ' + val)
     if(this.state.setResult === '1' ){
+      document.getElementById("textColor").style.color = "black";
       return(
         <div>
           <MuiThemeProvider key = {"theme"}>
           <AppBar title="QrCode" showMenuIconButton={false}/>
         </MuiThemeProvider>
         <MuiThemeProvider > 
-        <div>
+        <div id="textColor">
         <br/>
         <br/>
         {'ขอบคุณที่ใช้บริการค่ะ'}
@@ -266,7 +244,7 @@ class Loginscreen extends Component {
               disabled={loadingSignOut}
             />
             <br/>
-       </div> 
+       </div>
        </MuiThemeProvider>
        </div>
       );
