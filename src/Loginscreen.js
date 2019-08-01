@@ -4,7 +4,33 @@ import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import QRCode from 'qrcode.react'
+import { css } from '@emotion/core';
+import { FadeLoader } from 'react-spinners';
+import './index.css'
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: #00BFFF;
+`;
+const logo = require('./logo.png');
 /*
+<br/>
+{'sign in : ' + loadingSignIn}
+ <br/>
+{'username : ' + this.state.username}
+<br/>
+{'userEncrypt : ' + this.state.userEncrypt}
+<br/>
+{'setResult : ' + this.state.setResult}
+<br/>
+{'Previous ID : ' + this.state.previousID}
+<br/>
+{'QRCODE ID : ' + this.state.QRID}
+<br/>
+{'dateTime : ' + this.state.dateTime}
+<br/>
+{'expireTime : ' + this.state.expireTime}
+
 function pad(number, length) {
    
     var str = '' + number;
@@ -90,6 +116,9 @@ function encrypt(word){
   }
   return result;
 }
+var loadingSignIn = false;
+var loadingSignOut = false;
+var falseSignin = '';
 var testId;
 var testPassword;
 class Loginscreen extends Component {
@@ -128,14 +157,12 @@ class Loginscreen extends Component {
                         '</GetPatron> ' +
                     '</soap:Body> ' +
                 '</soap:Envelope>' ;
-  axios.create({
-    baseURL: "http://localhost:3000"
-  }).post('https://opac.psu.ac.th/PatronService.asmx?op=GetPatron',
-    xmls,
-    {headers:
-      { 
+  axios.post('https://cors-anywhere.herokuapp.com/http://opac.psu.ac.th/PatronService.asmx?op=GetPatron',
+    xmls,{
+      headers: {
         'Content-Type': 'text/xml',
-      }
+        'Access-Control-Allow-Origin': '*',
+      },
     }).then(res=>{
       var resultxml = res.data;
       var i = 0
@@ -150,6 +177,22 @@ class Loginscreen extends Component {
     }).catch(err=>{console.log(err)});
     }
   handleClick(){
+    loadingSignIn = true
+    loadingSignOut = false
+    function loadingForm(){
+      return (
+        <div className='sweet-loading'>
+          <FadeLoader
+            css={override}
+            sizeUnit={"px"}
+            size={20}
+            color={'#00BFFF'}
+            loading={loadingSignIn}
+          />
+        </div> 
+      );
+    }
+    falseSignin = loadingForm()
     testId = encrypt(this.state.username)
     testPassword = encrypt(this.state.password)
     this.sendRequest()
@@ -165,6 +208,9 @@ class Loginscreen extends Component {
     this.setState({QRID:'TM'+ encrypt(getDate('gen') + this.state.username), size:250,})
   }
   signOutWeb(){
+    falseSignin = ''
+    loadingSignOut = true
+    loadingSignIn = false
     this.setState({username:''})
     this.setState({password:''})
     this.setState({userEncrypt:''})
@@ -208,83 +254,28 @@ class Loginscreen extends Component {
             {this.state.expireTime}
             <br/>
             <br/>
-            หากไม่สามารถเข้าใช้งานห้องสมุดได้ทันในเวลาที่กำหนด
+            หากไม่สามารถเข้าใช้งานห้องสมุดภายในเวลาที่กำหนด
             <br/>
-            สามารถลงชื่อเข้าใช้ใหม่อีกครั้งเพื่อสร้าง QrCode ได้ค่ะ
+            สามารถลงชื่อเข้าใช้อีกครั้งเพื่อสร้าง QrCode ได้ค่ะ
            <br/>
             <RaisedButton 
               label="Sign Out" 
               primary={true}
               style = {style}
-              onClick={() => this.signOutWeb()}/>
+              onClick={() => this.signOutWeb()}
+              disabled={loadingSignOut}
+            />
+            <br/>
        </div> 
        </MuiThemeProvider>
-       <br/>
-       {'username : ' + this.state.username}
-       <br/>
-       {'userEncrypt : ' + this.state.userEncrypt}
-       <br/>
-       {'setResult : ' + this.state.setResult}
-       <br/>
-       {'Previous ID : ' + this.state.previousID}
-       <br/>
-       {'QRCODE ID : ' + this.state.QRID}
-       <br/>
-       {'dateTime : ' + this.state.dateTime}
-       <br/>
-       {'expireTime : ' + this.state.expireTime}
        </div>
       );
     }
     else if(this.state.setResult === '0' ){
-      return (
-        <div>
-          <MuiThemeProvider key = {"theme"}>
-            <AppBar title="Sign in PSU Passport" showMenuIconButton={false}/>
-          </MuiThemeProvider>
-            <MuiThemeProvider > 
-          <div>
-          <br/>
-             {'id หรือ password ไม่ถูกต้อง '}
-             <br/>
-           <TextField
-             hintText="Enter student ID"
-             floatingLabelText="Student ID"
-             onChange={(event,newValue) => this.setState({username:newValue})}
-             />
-             <br/>
-             <TextField
-               type="password"
-               hintText="Enter Password"
-               floatingLabelText="Password"
-               onChange={(event,newValue) => this.setState({password:newValue})}
-               />
-             <br/>
-             
-             <RaisedButton 
-              label="Sign In" 
-              primary={true}
-              style = {style}
-              onClick={() => this.handleClick()}/>
-  
-         </div>   
-          </MuiThemeProvider>
-          <br/>
-       {'username : ' + this.state.username}
-       <br/>
-       {'userEncrypt : ' + this.state.userEncrypt}
-       <br/>
-       {'setResult : ' + this.state.setResult}
-       <br/>
-       {'Previous ID : ' + this.state.previousID}
-       <br/>
-       {'QRCODE ID : ' + this.state.QRID}
-       <br/>
-       {'dateTime : ' + this.state.dateTime}
-       <br/>
-       {'expireTime : ' + this.state.expireTime}
-         </div>
-      );
+      falseSignin = 'Invalid login, please try again'
+      document.getElementById("textColor").style.color = "red";
+      loadingSignIn = false
+      this.setState({setResult:'start'})
     }
     return (
       <div>
@@ -292,7 +283,14 @@ class Loginscreen extends Component {
           <AppBar title="Sign in PSU Passport" showMenuIconButton={false}/>
         </MuiThemeProvider>
           <MuiThemeProvider > 
-        <div>
+        <div id="textColor">
+        <br/>
+        <br/>
+        <img alt='logo' style={{ width: 350 }} src={String(logo)} />
+          <br/>
+          <br/>
+          {falseSignin}
+          <br/>
          <TextField
            hintText="Enter student ID"
            floatingLabelText="Student ID"
@@ -306,29 +304,17 @@ class Loginscreen extends Component {
              onChange={(event,newValue) => this.setState({password:newValue})}
              />
            <br/>
-           
+           <br/>
            <RaisedButton 
             label="Sign In" 
             primary={true}
             style = {style}
-            onClick={() => this.handleClick()}/>
+            onClick={() => this.handleClick()}
+            disabled={loadingSignIn}
+            />
             <br/>
        </div>   
         </MuiThemeProvider>
-        <br/>
-       {'username : ' + this.state.username}
-       <br/>
-       {'userEncrypt : ' + this.state.userEncrypt}
-       <br/>
-       {'setResult : ' + this.state.setResult}
-       <br/>
-       {'Previous ID : ' + this.state.previousID}
-       <br/>
-       {'QRCODE ID : ' + this.state.QRID}
-       <br/>
-       {'dateTime : ' + this.state.dateTime}
-       <br/>
-       {'expireTime : ' + this.state.expireTime}
        </div>
     );
   }
